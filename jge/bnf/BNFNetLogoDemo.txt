@@ -1,5 +1,0 @@
-<action> ::= <action><move>|<move><move><move><move>
-<move> ::= <forward>|<forward>|<turnleft>|<turnright>
-<forward> ::= fd 1 wait 0.5 
-<turnleft> ::= lt 90 wait 0.5 
-<turnright> ::= rt 90 wait 0.5 
