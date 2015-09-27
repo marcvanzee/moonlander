@@ -1,0 +1,8 @@
+<prog> ::= <action>|<prog><action>
+<action> ::= if <comp><var> [<action>] | ifelse <comp><var> [<action>][<action>] | <atomic><action> | <atomic>
+<atomic> ::= thrust-on | thrust-off 
+<comp> ::= greater-than | smaller-than 
+<var> ::= velocity 0.<digit05><digit> | height <digit05><digit> | time <digit05><digit><digit> | height <digit02><digit>
+<digit> ::= 0|1|2|3|4|5|6|7|8|9
+<digit05> ::= 0|1|2|3|4|5
+<digit02> ::= 0|1|2

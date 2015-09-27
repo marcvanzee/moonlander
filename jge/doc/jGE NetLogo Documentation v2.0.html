@@ -1,0 +1,575 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>jGE NetLogo Documentation</title>
+
+
+<style type="text/css">
+
+:link {
+  color: rgb(110, 0, 110)
+}
+:visited {
+  color: rgb(110, 0, 110) 
+}
+
+hr {
+  color: rgb(45,0,45);
+  height: 3px;
+}
+
+body {
+  margin-left: 4%;
+  font-family: arial, sans-serif;
+  background: white;
+}
+
+th {
+  font-family: arial, sans-serif;
+}
+
+td {
+  font-family: arial, sans-serif;
+}
+
+div.banner {
+  text-align: center;
+  margin-left: -4%;
+  font-size: 150%;
+}
+
+div.version {
+  margin-left: -4%;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: 75%;
+  font-weight: bold;
+  text-align: right ;
+  color: rgb(232, 232, 232) ;
+  background: rgb(45,0,45);
+  height: 20;
+}
+
+h1 {
+  margin-left: -4%;
+  margin-bottom: 0em;
+  font-size: 150%;
+  color: rgb(232, 232, 232) ;
+  background: rgb(45,0,45);
+  padding: 0.3em;
+  height: 45;
+}
+
+h2 {
+  margin-left: -2%;
+  font-size: 125%;
+  background: rgb(166,172,255);
+  padding: 0.3em;
+}
+
+h3 {
+  font-size: 125%;
+  background: rgb(175,175,175);
+  padding: 0.2em;
+}
+
+h4 {
+  font-size: 110% ;
+  background: rgb(200,200,200);
+  padding: 0.125em;
+}
+
+blockquote {
+  border: solid;
+  border-width: thin;
+  background: rgb(250,250,220);
+  padding-left: 1em;
+}
+
+pre {
+  margin-left: 2em;  
+  background: rgb(225,225,225);
+  font-family: monospace;
+  padding: 1em;
+}
+
+p.question {
+  margin-left: 2em ;
+  font-style: italic ;
+}
+
+p.screenshot {
+  text-align: center ;
+}
+
+p.question {
+  font-weight: bold ;
+}
+
+.smaller {
+  font-size: 80%;
+}
+
+.license { background-color: #ffc; padding: 2em; 
+  border-style: solid; border-width: 1pt; 
+  font-family: courier; font-size: 80%; 
+}
+
+td.rightalign {vertical-align: top; text-align: right;}
+td.centeralign {vertical-align: top; text-align: center;}
+
+
+
+p { margin-left: 1.5em ; margin-right: 0.5em ; text-align:justify}
+h3 { font-size: 115% ; }
+h4 { font-size: 100% ; margin-left: 1.5em ; background: white ; }
+
+</style>
+	
+
+</head>
+
+<body>
+
+
+<h1>jGE NetLogo v2.0 Documentation</h1>
+<div class="version">jGE NetLogo 2.0 User Manual&nbsp;&nbsp;&nbsp;</div>
+
+
+
+<h2>Introduction</h2>
+<p>The jGE NetLogo extension lets users of <a href="http://ccl.northwestern.edu/netlogo">NetLogo</a> (Wilensky, 1999) incorporate within their models a small part of the functionality and features of the <a href="http://www.informatics.bangor.ac.uk/~loukas/jge">jGE Library</a> (Georgiou and Teahan, 2006a). Namely, it provides primitives which allow the users to take advantage of the <a href="http://www.grammatical-evolution.org/">Grammatical Evolution</a> algorithm (O'Neill and Ryan, 2003) and utilise it for the evolution of the morphology and/or the behaviour of NetLogo agents (turtles). This extension includes reporters and commands which provide the functionality of Grammatical Evolution plus some supporting / helper primitives. </p>
+<p>The goal of this extension is to allow both NetLogo users to get familiar with and use Grammatical Evolution within their models, and users interested in Evolutionary Computation to use evolutionary algorithms (like Grammatical Evolution) directly within a simulation environment for the evolution of the morphology and behaviour of agents.</p>
+<p>Furthermore, another one goal of this extension is to facilitate the evolution of the behaviour of NetLogo agents. The key factor in most of the Evolution models of NetLogo is how the  agent-environment interaction affects the simulation. There are two components  to this (fairly obviously) &ndash; the agents, and the environment. What the existing  NetLogo agents do is interact with (possibly) a dynamic environment. Usually  the agents themselves are not dynamic themselves &ndash; i.e. their behaviour does  not usually alter based on the changing environment. What the jGE NetLogo  extension provides is the ability for the human modeller to alter the behaviour of the agents.  The agents themselves can also alter the environment, and with the jGE NetLogo  extension, it is now possible to have the environment affect the resultant behaviour  of the agents as they determine what is best to interact successfully (or even  survive) within it.<br>
+</p>
+<h2>How to Install</h2>
+<p> The jGE NetLogo extension requires at least NetLogo 4.1. It is not tested with older versions of NetLogo. 
+To install the jGE NetLogo extension for use by any model, place jGE's folder in the extensions directory in the NetLogo directory. Or, you can just keep the jGE's folder in the same folder as the model that uses it. For more information about other ways of installing an extension refer to the <a href="http://ccl.northwestern.edu/netlogo/docs/extensions.html">NetLogo Extensions Guide</a>.<br>
+</p>
+
+
+<h2>Getting Started </h2>
+<p>The main usage pattern of jGE in NetLogo models is as follows: The user creates a model for the problem in question and defines the agents (breeds), and their initial morphology and/or behaviour. The domains of these are defined in external text files as BNF Grammar/s which will be used for the mapping of the genotype of the agents (binary string) to the phenotype (NetLogo agent's attributes or actions). In the case of the evolution of the morphology of an agent, the modeller has to assign the evolved attributes to the agent by decoding the resultant phenotype and using the NetLogo programming language features. In the case of the evolution of the behaviour of an agent, the modeller has to execute the resultant behaviour (phenotype) using the &quot;run&quot; native primitive. Also, regarding the selection mechanism, and the replacement strategy, these are responsibilities of the NetLogo model. In this way the modellers gain the maximum flexibility (limited only by the NetLogo features) plus the advantage of using the Grammatical Evolution algorithm in a straight and simple manner for the evolution of their agents.<br>
+</p>
+<h2>jGE NetLogo Dictionary</h2>
+<p>The documentation of the commands and reporters of the jGE NetLogo extension follows.</p>
+
+
+<div class="dict_entry">
+<h3><a name="jge:load-bnf" id="jge:load-bnf">jge:load-bnf</a></h3>
+<h4>jge:load-bnf <i>path</i> <i>reference</i></h4>
+
+<p>
+This command loads, parses, and keeps in-memory (for later use in the model by mentioning the <i>reference</i> value) the BNF grammar which is found in a file with the given <i>path</i>. The argument <i>path</i> is a string with the value of the absolute path of the BNF file (or the relative path to the model which calls this command). The argument <i>reference</i> is a string with the name that will be used in the model for referencing the loaded BNF grammar (in that way it is possible to load and use more than one BNF grammar in the same model).      
+</p>
+
+<p>
+Note: If the file does not exist or the BNF grammar has a wrong format (not compatible with jGE according to the jGE Documentation) then these will cause a runtime error. Check the log file  of the NetLogo installation for more information when a non-valid BNF Grammar runtime error occurs. If another BNF grammar is loaded using the same reference with a previous one, then the previous grammar will be replaced by the new grammar.</p>
+	  
+<pre>
+;; Assume it is a Windows Machine. Load the first BNF Grammar
+jge:load-bnf &quot;C:/BNFFile1.txt&quot; &quot;grammar1&quot;
+
+;; Load the second BNF Grammar
+jge:load-bnf &quot;C:/BNFFile2.txt&quot; &quot;grammar2&quot;
+
+;; Replace BNF Grammar in grammar1 with a new BNF Grammar
+jge:load-bnf &quot;C:/BNFFile3.txt&quot; &quot;grammar1&quot;
+</pre>
+
+<p>
+See also <a href="#jge:bnf-grammar">bnf-grammar</a>.
+<br><br>
+</p>
+	  
+</div>
+
+
+<div class="dict_entry">
+<h3><a name="jge:bnf-grammar" id="jge:bnf-grammar">jge:bnf-grammar</a></h3>
+<h4>jge:bnf-grammar <i>reference</i></h4>
+
+<p>
+Reports the BNF Grammar which is referenced by <i>reference</i>.
+</p>
+	  
+<p>
+Note: A non-existent <i>reference  </i> will cause a runtime error. </p>
+	  
+<pre>
+;; Assume it is a Windows Machine
+;; Load the BNF Grammar
+jge:load-bnf &quot;C:/BNFFile.txt&quot; &quot;grammar&quot;
+;; Print the loaded BNF Grammar
+print jge:bnf-grammar &quot;grammar&quot;
+&lt;Int&gt; 	
+     &lt;Int&gt;&lt;Digit&gt; 	
+     &lt;Digit&gt;
+
+&lt;Digit&gt;
+     0
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+</pre>
+
+<p>See also <a href="#jge:load-bnf">load-bnf</a>.
+<br><br></p>
+	  
+</div>
+
+
+<div class="dict_entry">
+
+<h3><a name="jge:phenotype" id="jge:phenotype">jge:phenotype</a></h3>
+<h4>jge:phenotype <i>genotype</i> <i>grammar</i> <i>codonsize</i> <i>maxwraps</i></h4>
+
+<p>
+Executes the genotype to phenotype Grammatical Evolution mapping algorithm and reports a string with the corresponding phenotype to the given binary <i>genotype</i>. The mapping process uses the BNF Grammar referenced by <i>grammar</i>, size for each codon by the given <i>codonsize</i>, and maximum number of genotypes by <i>maxwraps</i>. If the resultant phenotype is invalid (contains non-terminal symbols) then an empty string is returned. 
+</p>
+	  
+<p>
+Note: Setting <i>genotype</i> to anything else other than a binary string, or setting <i>grammar</i> to a non existent reference of a BNF Grammar, or setting the argument <i>codonsize</i> to a non-positive integer, or setting <i>maxwraps</i> to a negative value, will cause a runtime error.
+</p>
+	  
+<pre>
+show jge:phenotype &quot;01000110110001&quot; &quot;actionsGrammar&quot; 2 4
+=&gt; &quot;fd 1 fd 1 lt 90 fd 1 fd 1 rt 90 fd 1&quot;
+show jge:phenotype &quot;1011010110&quot; &quot;integersGrammar&quot; 2 0
+=&gt; &quot;325&quot;
+</pre>
+
+<p>See also <a href="#jge:load-bnf">load-bnf</a>, <a href="#jge:is-binary?">is-binary?</a>.
+<br><br></p>
+	  
+</div>
+
+<div class="dict_entry">
+
+<h3><a name="jge:crossover" id="jge:crossover">jge:crossover</a></h3>
+<h4>jge:crossover <i>parentA</i> <i>parentB</i> <i>probability</i></h4>
+
+<p>
+Reports a NetLogo List with the results (two binary strings) of the application of the Standard One Point Crossover operation with probability <i>probability</i> to the variable-length binary strings <i>parentA</i> and <i>parentB</i>.
+</p>
+	  
+<p>
+Note: The arguments <i>parentA</i> and <i>parentB</i> should be non-empty binary strings. The argument <i>probability</i> should take values from 0.0 to 1.0. Setting the arguments to out of range values will not cause any runtime error except in the case of empty parent/s. In the case of <i>probability</i> any negative value is counted as equivalent to 0.0 and any value greater that one is counted as equivalent to 1.0.
+</p>
+	  
+<pre>
+show jge:crossover &quot;0000000000&quot; &quot;1111111111&quot; 0.9
+=&gt; [&quot;00000000111111&quot; &quot;111100&quot;]
+show jge:crossover &quot;0000000000&quot; &quot;1111111111&quot; 0.9
+=&gt; [&quot;0001&quot; &quot;1111111110000000&quot;]
+show jge:crossover &quot;0000000000&quot; &quot;1111&quot; 0.9
+=&gt; [&quot;000000000&quot; &quot;11110&quot;]
+show jge:crossover &quot;0000000000&quot; &quot;1111&quot; 0.9
+=&gt; [&quot;00&quot; &quot;111100000000&quot;]
+</pre>
+
+<p>See also <a href="#jge:crossover-fixed-length">crossover-fixed-length</a>, <a href="#jge:mutation">mutation</a>, <a href="#jge:is-binary?">is-binary?</a>.
+<br><br></p>
+	  
+</div>
+
+
+<div class="dict_entry">
+
+<h3><a name="jge:crossover-fixed-length" id="jge:crossover-fixed-length">jge:crossover-fixed-length</a></h3>
+<h4>jge:crossover-fixed-length <i>parentA</i> <i>parentB</i> <i>probability</i></h4>
+
+<p>
+Reports a NetLogo List with the results (two binary strings of the same length) of the application of the Standard One Point Crossover operation with probability <i>probability</i> to the fixed-length binary strings <i>parentA</i> and <i>parentB</i>.
+</p>
+	  
+<p>
+Note: The arguments <i>parentA</i> and <i>parentB</i> should be non-empty binary strings of the same length. The argument <i>probability</i> should take values from 0.0 to 1.0. Setting the arguments to out of range values will not cause any runtime error except in the case of empty or with different length parent/s. In the case of <i>probability</i> any negative value is counted as equivalent to 0.0 and any value greater that one is counted as equivalent to 1.0.
+</p>
+	  
+<pre>
+show jge:crossover-fixed-length &quot;0000000000&quot; &quot;1111111111&quot; 0.9
+=&gt; [&quot;0000001111&quot; &quot;1111110000&quot;]
+show jge:crossover-fixed-length &quot;0000000000&quot; &quot;1111111111&quot; 0.9
+=&gt; [&quot;0000000011&quot; &quot;1111111100&quot;]
+show jge:crossover-fixed-length &quot;00000&quot; &quot;11111&quot; 0.9
+=&gt; [&quot;00111&quot; &quot;11000&quot;]
+show jge:crossover-fixed-length &quot;000000&quot; &quot;111111&quot; 0.9
+=&gt; [&quot;000001&quot; &quot;111110&quot;]
+</pre>
+
+<p>See also <a href="#jge:crossover">crossover</a>, <a href="#jge:mutation">mutation</a>, <a href="#jge:is-binary?">is-binary?</a>.
+<br><br></p>
+	  
+</div>
+
+
+
+<div class="dict_entry">
+
+<h3><a name="jge:mutation" id="jge:mutation">jge:mutation</a></h3>
+<h4>jge:mutation <i>offspring</i> <i>probability</i></h4>
+
+<p>
+Reports a string with the result of the application of the Point Mutation operation with probability <i>probability</i> in the binary string <i>offspring</i>.
+</p>
+	  
+<p>
+Note: The argument <i>offspring</i> is a non-empty binary string. Setting this argument to an invalid value will cause a runtime error. The argument <i>probability</i> should take values from 0.0 to 1.0. Setting this argument to out of range values will not cause any runtime error because any negative value is counted as equivalent to 0.0 and any value greater that one is counted as equivalent to 1.0.
+</p>
+	  
+<pre>
+show jge:mutation &quot;0000000000&quot; 0.1
+=&gt; &quot;0000100001&quot;
+show jge:mutation &quot;0000000000&quot; 0.1
+=&gt; &quot;0001000000&quot;
+show jge:mutation &quot;0000000000&quot; 0.1
+=&gt; &quot;1000010000&quot;
+show jge:mutation &quot;0000000000&quot; 0.1
+=&gt; &quot;0001100100&quot;
+</pre>
+
+<p>See also <a href="#jge:crossover">crossover</a>, <a href="#jge:crossover-fixed-length">crossover-fixed-length</a>, <a href="#jge:is-binary?">is-binary?</a>.
+<br><br></p>
+	  
+</div>
+
+<div class="dict_entry">
+
+<h3><a name="jge:individual" id="jge:individual">jge:individual</a></h3>
+<h4>jge:individual <i>codonsize</i> <i>min</i> <i>max</i></h4>
+
+<p>
+Reports a randomly generated genotype (binary string) of size between the specified limits (size of codon in bits, minimum length in codons, and maximum length in codons).  The binary string will have a random number of codons (each one of <i>codonsize</i> bits) in the range between <i>min</i> and <i>max</i>.
+</p>
+	  
+<p>
+Note: All arguments are positive numbers (integers). Setting any argument with a value less than or equal to zero (0) or setting to <i>min</i> a value greater than the value of <i>max</i> will cause a runtime error.
+</p>
+	  
+<pre>
+show jge:individual 4 1 3
+=&gt; &quot;01011010&quot;
+show jge:individual 4 1 3
+=&gt; &quot;1101&quot;
+show jge:individual 4 1 3
+=&gt; &quot;111001010010&quot;
+</pre>
+
+<p>See also <a href="#jge:population">population</a>.
+<br><br></p>
+	  
+</div>
+
+<div class="dict_entry">
+
+<h3><a name="jge:population" id="jge:population">jge:population</a></h3>
+<h4>jge:population <i>size</i> <i>codonsize</i> <i>min</i> <i>max</i></h4>
+
+<p>
+Reports a NetLogo List of length <i>size</i> with randomly generated genotypes (binary strings). Each genotype (binary string) contains a random number of codons (each one of <i>codonsize</i> bits) in the range between <i>min</i> and <i>max</i>.
+</p>
+	  
+<p>
+Note: All arguments are positive numbers (integers). Setting any argument with a value less than or equal to zero (0) or setting to <i>min</i> a value greater than the value of <i>max</i> will cause a runtime error.</p>
+	  
+<pre>
+show jge:population 6 2 1 3
+=&gt; [&quot;0101&quot; &quot;001111&quot; &quot;01&quot; &quot;000110&quot; &quot;01&quot; &quot;001101&quot;]
+show jge:population 6 2 1 3
+=&gt; [&quot;11&quot; &quot;01&quot; &quot;0110&quot; &quot;00&quot; &quot;000010&quot; &quot;0101&quot;]
+show jge:population 6 2 1 3
+=&gt; [&quot;1110&quot; &quot;101100&quot; &quot;100101&quot; &quot;11&quot; &quot;110101&quot; &quot;10&quot;] 
+show jge:population 6 2 3 3
+=&gt; [&quot;111000&quot; &quot;101100&quot; &quot;100101&quot; &quot;101011&quot; &quot;110101&quot; &quot;000010&quot;]
+</pre>
+
+<p>See also <a href="#jge:individual">individual</a>.
+<br><br></p>
+	  
+</div>
+
+
+<div class="dict_entry">
+
+<h3><a name="jge:is-binary?" id="jge:is-binary?">jge:is-binary?</a></h3>
+<h4>jge:is-binary? <i>string</i> </h4>
+
+<p>
+Reports true if the given <i>string</i> is binary, false otherwise.
+</p>
+	  
+<p>
+Note: If the given <i>string</i> is empty then false is reported.</p>
+	  
+<pre>
+show jge:is-binary? "000101101010"
+=&gt; true
+show jge:is-binary? "abcdabcdabcd"
+=&gt; false
+show jge:is-binary? "232323232323"
+=&gt; false
+show jge:is-binary? "200010110100"
+=&gt; false
+show jge:is-binary? ""
+=&gt; false
+</pre>
+
+<p>See also <a href="#jge:phenotype">phenotype</a>, <a href="#jge:crossover">crossover</a>, <a href="#jge:crossover-fixed-length">crossover-fixed-length</a>, <a href="#jge:mutation">mutation</a>.
+<br><br></p>
+	  
+</div>
+
+
+
+<div class="dict_entry">
+
+<h3><a name="jge:version" id="jge:version">jge:version</a></h3>
+<h4>jge:version</h4>
+
+<p>
+Reports the product version of the jGE NetLogo extension.
+</p>
+
+<pre>
+show jge:version
+=&gt; &quot;2.0&quot;
+</pre>
+
+<p>&nbsp;</p>
+  
+</div>
+
+
+
+<h2>What's New?</h2>
+
+
+<div class="dict_entry">
+
+<h3>Version 2.0</h3>
+
+
+<ul>
+
+
+<li>General
+<ul>
+	<li>Porting of the jGE NetLogo extension to the version 4.1 of NetLogo (NetLogo Extension API version: 4.1)</li>
+	<li>Update of the <i>jge:load-bnf</i> command regarding the relative path argument. Now, when relative paths are supplied, 
+	      these must be relative to the model and not the jGE NetLogo jar file as in the previous version (check documentation)</li>	
+</ul>
+</li>
+
+<li>Primitives
+<ul>
+	<li>Added <i>jge:version</i> which reports the product version of the extension</li>
+	<li>Added <i>jge:is-binary?</i> which reports if a string is binary or not</li>	
+	<li>Added <i>jge:crossover-fixed-length</i> which implements the standard one point crossover operation for fixed-length genomes.
+</ul>
+</li>
+
+<li>Models
+<ul>
+	<li>Updating and improvement of the jGE Example model (file <i>jGE NetLogo.nlogo</i>)</li>
+</ul>
+</li>
+
+<li>Documentation
+<ul>
+	<li>Many small fixes and improvements to this documentation</li>
+	<li>Added <i>What's New?</i> section</li>
+</ul>
+</li>
+
+<li>Fixes
+<ul>
+	<li>Replacement of the obsolete in NetLogo Extension API version 4.1 constructor <i>LogoList(int)</i> with the constructor <i>LogoList()</i></li>
+	<li>Replacement of the obsolete constructor <i>HeadlessWorkspace()</i> with the method <i>HeadlessWorkspace.newInstance()</i></li>	
+</ul>
+</li>
+
+</ul>
+
+
+<p>&nbsp;</p>
+  
+</div>
+
+
+
+<h2>Contact Information</h2>
+<p>Author: Loukas Georgiou</p>
+<p>Email: <a href="mailto:eep201@bangor.ac.uk">eep201@bangor.ac.uk</a>, <a href="mailto:loukas@informatics.bangor.ac.uk">loukas@informatics.bangor.ac.uk</a></p>
+<p>Web Site: <a href="http://www.bangor.ac.uk/~eep201/">http://www.bangor.ac.uk/~eep201/</a><br>
+</p>
+
+<h2>References</h2>
+<p>
+GEORGIOU, L. and TEAHAN, W.J. (2006) 
+jGE - A Java implementation of Grammatical Evolution. 
+<span style="text-decoration:underline">10th WSEAS International Conference on Systems</span>, Athens, Greece, July 10-15, 2006.
+</p>
+
+<p>
+GEORGIOU, L. and TEAHAN, W. J. (2006) 
+Implication of Prior Knowledge and Population Thinking in Grammatical Evolution: Toward a Knowledge Sharing Architecture. 
+<span style="text-decoration:underline">WSEAS Transactions on Systems</span> 5 (10), 2338-2345.
+</p>
+
+<p>
+O'NEILL, M. and RYAN, C. (2001) 
+Grammatical Evolution. 
+<span style="text-decoration:underline">IEEE Transactions on Evolutionary Computation</span> 5(4), 349-358.
+</p>
+
+<p>
+O'NEILL, M. and RYAN, C. (2003) 
+<span style="text-decoration:underline">Grammatical Evolution: Evolutionary Automatic Programming in an Arbitrary Language</span>. 
+USA: Kluwer Academic Publishers.
+</p>
+
+<p>
+UWB SCHOOL OF INFORMATICS (2006) 
+<span style="text-decoration:underline">Java GE (jGE) Official Web Site</span>. 
+United Kingdom, Bangor. Available from http://www.informatics.bangor.ac.uk/~loukas/jge.
+</p>
+
+<p>
+WILENSKY, U. (1999) 
+<span style="text-decoration:underline">NetLogo.</span>
+Evanston, IL: Center for Connected Learning and Computer-Based Modeling, Northwestern University. 
+Available from http://ccl.northwestern.edu/netlogo.<br>
+</p>
+
+
+
+<h2>Terms of Use</h2>
+
+<p>All contents &copy; 2008 Loukas Georgiou.</p>
+
+<p>jGE NetLogo extension is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>jGE NetLogo extension is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with jGE NetLogo extension.  If not, see <a href="http://www.gnu.org/licenses">http://www.gnu.org/licenses</a>.<br>
+<br>
+<br>
+</p>
+</body>
+
+</html>
