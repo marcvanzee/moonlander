@@ -3,12 +3,16 @@
 
 **Note: tested on Netlogo 4.2**
 
+[Download simulations report](simulations.pdf)
+
 ### What is it?
 
 A simulation that tries to land a moonlander as good as possible using genetic programming. The optimalisation goal is to let the moonlander land as quick as possible with as much remaining fuel as possible.
 
 I have divided this goal into two sub-goals:
+
 (1) Landing the moonlander as quick as possible;
+
 (2) Landing the moonlander with as much remaining fuel as possible.
 
 I have first tried to optimize these subgoals as much as possible, and then combined the solutions to find an optimal combination. This optimal state is relative; there is no way of knowing whether fuel is more important than time. One thing that is sure is that when one subgoal is optimally met, the other will not be. Therefore I have left the choice for an optimum as an option in the GUI.
@@ -100,7 +104,9 @@ I used a mutation value of 5-10% and a crossover rate of 75%. Mutation stands fo
 Set to which value the algorithm should optimize. Notice that when both the values are set to 1, there is a big change that the optimum will lie at one of the two values (meaning, a very low time or a very high fuel), completely wiping out the other value.
 
 This has two reasons:
+
 [1] The fitness of one value is equal to the sum of the two. There are basically three optimum: (low time) (low fuel) (both half). It can happen that the simulation falls in one of the three. This can be solved by altering the fitness function. For example; multiplying the values of time and fuel, giving them a higher value when put together.
+
 [2] The crossover/mutation value. As said, my simulation does a lot of exploitation and therefore has the risk of fallen into a local optimum quickly. This can be solved by changing the mutation and crossover values.
 
 - BNF-File: choose a file that I have previously used. But for the simulation to work correctly, choose "BNF-Final.txt".
