@@ -6,6 +6,8 @@
 
 ### What is it?
 
+![Netlogo Screenshot](images/screenshot.png)
+
 A simulation that tries to land a moonlander as good as possible using genetic programming. The optimalisation goal is to let the moonlander land as quick as possible with as much remaining fuel as possible.
 
 I have divided this goal into two sub-goals:
